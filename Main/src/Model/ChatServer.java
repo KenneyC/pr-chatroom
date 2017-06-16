@@ -1,4 +1,4 @@
-/**
+package Model; /**
  * Created by Kenney on 9/06/17.
  */
 
@@ -8,6 +8,10 @@ import java.util.*;
 
 
 public class ChatServer {
+    protected static Vector handlers = new Vector();
+    public ChatServer() {
+
+    }
     public ChatServer (int port) throws IOException {
         /*
         Server for sockets, kind of like a network of sockets. Sockets are end
@@ -19,6 +23,9 @@ public class ChatServer {
 
          */
         ServerSocket server = new ServerSocket (port);
+        /*
+        A dynamic array that keeps track of all the connected clients
+        */
 
         /*
         Sit in a loop and wait for clients to connect to the program.
@@ -27,22 +34,26 @@ public class ChatServer {
          */
         while (true) {
             Socket client = server.accept();
+            ClientThread cl = new ClientThread(client);
+            cl.start();
             System.out.println("Connection accepted client: " + client.getInetAddress());
-            ChatHandler c = new ChatHandler(client);
-            c.start();
+            handlers.addElement(cl);
         }
     }
 
+
     /*
-    Create a new ChatServer object, and passing the command-line port as a
+    Create a new Model.ChatServer object, and passing the command-line port as a
     parameter. The clients will connected to this port.
      */
     public static void main(String args[]) throws IOException {
         if (args.length != 1) {
-            throw new RuntimeException("Syntax: ChatServer <port>");
+            throw new RuntimeException("Syntax: Model.ChatServer <port>");
         }
-        new ChatServer (Interger.parseInt(args[0]));
+        new ChatServer (Integer.parseInt(args[0]));
     }
+
+
 
 
 }
