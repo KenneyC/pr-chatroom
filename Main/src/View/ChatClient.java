@@ -130,6 +130,7 @@ public class ChatClient{
         Function for building the main UI for chatting.
          */
         public void buildFrame() {
+            setSize(350,580);
             textArea = new JTextArea( 40,40);
             textArea.setEditable(false);
             textArea.setLineWrap(true);
